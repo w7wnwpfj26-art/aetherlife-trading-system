@@ -1,0 +1,28 @@
+{
+  "exchange": "binance",
+  "testnet": true,
+  "symbols": [
+    "BTCUSDT"
+  ],
+  "timeframe": "1m",
+  "strategy": "breakout",
+  "leverage": 10,
+  "strategy_config": {
+    "lookback_period": 20,
+    "threshold": 0.005,
+    "atr_multiplier": 2
+  },
+  "risk": {
+    "max_position_pct": 0.1,
+    "stop_loss_pct": 0.02,
+    "take_profit_pct": 0.05,
+    "max_daily_loss": 0.05
+  },
+  "ai_enhance": {
+    "enabled": false,
+    "multi_agent": false,
+    "ml_predictor": false,
+    "sentiment": false,
+    "auto_compound": false
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>AetherLife 前台总览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>body{font-family:'Inter',sans-serif;background:#0f172a;color:#f8fafc;} .glass{background:rgba(30,41,59,0.7);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,0.05);} .badge{padding:4px 10px;border-radius:9999px;font-size:12px;}</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950">
+  <div class="max-w-6xl mx-auto px-6 py-12 space-y-10">
+    <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <p class="text-sm text-blue-300/80 font-semibold">AetherLife · Multi-Agent · All Markets</p>
+        <h1 class="text-3xl md:text-4xl font-bold mt-2">全市场智能体量化前台</h1>
+        <p class="text-gray-400 mt-2">实时查看行情、信号与运行状态。统一入口：<code class="text-blue-300">/</code> · 后台：<code class="text-blue-300">/admin</code></p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="/" class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white text-sm">统一入口</a>
+        <a href="/admin" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm">返回后台</a>
+        <a href="#markets" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-200 text-sm border border-gray-700">跳转市场</a>
+      </div>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2"><span class="text-gray-300 text-sm">总资产估值</span><span class="badge bg-emerald-500/10 text-emerald-300">USD</span></div>
+        <div class="text-2xl font-bold" id="f-balance">--</div>
+        <div class="text-xs text-gray-500 mt-1">今日盈亏 <span id="f-pnl" class="text-emerald-300">--%</span></div>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2"><span class="text-gray-300 text-sm">实时延迟</span><span class="badge bg-blue-500/10 text-blue-300">ms</span></div>
+        <div class="text-2xl font-bold" id="f-latency">-- ms</div>
+        <div class="text-xs text-gray-500 mt-1">链路健康</div>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2"><span class="text-gray-300 text-sm">运行状态</span><span class="badge bg-gray-500/10 text-gray-300">Bot</span></div>
+        <div class="text-2xl font-bold" id="f-running">离线</div>
+        <div class="text-xs text-gray-500 mt-1">AetherLife 主循环</div>
+      </div>
+    </section>
+
+    <section id="markets" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3"><span class="font-semibold">加密货币</span><span class="text-xs text-gray-500">实时</span></div>
+        <div id="f-crypto" class="space-y-2 text-sm"></div>
+      </div>
+      <div class="glass rounded-xl p-5">
+        <div class="flex items-center justify-between mb-3"><span class="font-semibold">A股/港股/外汇/期货</span><span class="text-xs text-gray-500">实时</span></div>
+        <div id="f-others" class="space-y-2 text-sm"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    async function jget(url){ const r=await fetch(url); return r.json(); }
+    async function loadOverview(){ const r=await jget('/api/aetherlife/overview'); if(!r.success) return; const d=r.data; document.getElementById('f-balance').innerText=`$${(d.balance||0).toLocaleString()}`; document.getElementById('f-pnl').innerText=`${d.pnl_pct||0}%`; document.getElementById('f-running').innerText=d.running?'运行中':'离线'; document.getElementById('f-latency').innerText=`${d.latency_ms||'--'} ms`; }
+    async function loadMarket(){ const r=await jget('/api/aetherlife/market'); if(!r.success) return; const c=document.getElementById('f-crypto'); c.innerHTML=''; Object.entries(r.data.crypto||{}).forEach(([k,v])=>c.insertAdjacentHTML('beforeend',`<div class="flex justify-between"><span>${k}</span><span>${v}</span></div>`)); const o=document.getElementById('f-others'); o.innerHTML=''; Object.entries({...r.data.a_share,...r.data.forex,...r.data.futures}).forEach(([k,v])=>o.insertAdjacentHTML('beforeend',`<div class="flex justify-between"><span>${k}</span><span>${v}</span></div>`)); }
+    function init(){ loadOverview(); loadMarket(); setInterval(()=>{loadOverview();loadMarket();},15000); }
+    window.onload=init;
+  </script>
+</body>
+</html>

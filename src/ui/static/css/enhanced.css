@@ -1,0 +1,23 @@
+:root {
+  --surface: #0f172a;
+  --card: #1e293b;
+  --primary: #3b82f6;
+  --accent: #10b981;
+  --danger: #ef4444;
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+}
+
+.glass { backdrop-filter: blur(12px); background: rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.04); }
+.card-border { border: 1px solid #1f2937; }
+.badge { padding: 4px 10px; border-radius: 9999px; font-size: 12px; }
+.badge-success { background: rgba(16,185,129,0.1); color: #34d399; }
+.badge-warn { background: rgba(234,179,8,0.12); color: #facc15; }
+.badge-danger { background: rgba(239,68,68,0.12); color: #f87171; }
+.fade-in { animation: fade-in 180ms ease-in; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(4px);} to { opacity:1; transform: translateY(0);} }
+.shadow-strong { box-shadow: 0 24px 80px rgba(0,0,0,0.45); }
+.progress-bar { height: 6px; border-radius: 9999px; background: linear-gradient(90deg, #3b82f6, #10b981); }
+.table-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+.table-grid .head { color: var(--text-sub); font-size: 12px; }
+.table-grid .cell { color: var(--text-main); font-size: 13px; }

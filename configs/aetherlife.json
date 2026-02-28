@@ -1,0 +1,16 @@
+{
+  "symbol": "BTCUSDT",
+  "log_level": "INFO",
+  "cognition": {
+    "debate_enabled": true
+  },
+  "guard": {
+    "audit_log_enabled": true,
+    "audit_log_path": "logs/aetherlife_audit.jsonl"
+  },
+  "evolution": {
+    "evolution_hour_utc": 4,
+    "strategy_variants_per_round": 10,
+    "min_sharpe_to_deploy": 0.5
+  }
+}
