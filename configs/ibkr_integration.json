@@ -1,0 +1,75 @@
+{
+  "ibkr_integration": {
+    "connection": {
+      "host": "127.0.0.1",
+      "paper_trading_port": 7497,
+      "live_trading_port": 7496,
+      "client_id": 1,
+      "timeout": 20
+    },
+    "features": {
+      "enable_trading": true,
+      "enable_market_data": true,
+      "enable_account_monitoring": true,
+      "auto_reconnect": true
+    }
+  },
+  "execution_engine": {
+    "max_retries": 3,
+    "retry_delay_seconds": 1.0,
+    "dry_run": false,
+    "slippage_tolerance": 0.001
+  },
+  "routing_rules": {
+    "crypto": {
+      "preferred_exchanges": ["BINANCE", "BYBIT"],
+      "min_liquidity_threshold": 1000000
+    },
+    "a_stock": {
+      "exchange": "IBKR",
+      "special_handling": {
+        "limit_up_down_check": true,
+        "trading_hours_check": true,
+        "northbound_quota_check": true
+      }
+    },
+    "us_stock": {
+      "exchange": "IBKR"
+    },
+    "hk_stock": {
+      "exchange": "IBKR"
+    },
+    "forex": {
+      "exchange": "IBKR"
+    },
+    "futures": {
+      "exchange": "IBKR"
+    }
+  },
+  "risk_management": {
+    "ibkr": {
+      "max_position_size": 0.1,
+      "stop_loss_pct": 0.05,
+      "take_profit_pct": 0.1,
+      "northbound_quota_warning": 0.1
+    },
+    "crypto": {
+      "max_leverage": 20,
+      "stop_loss_pct": 0.1,
+      "take_profit_pct": 0.2
+    }
+  },
+  "market_specific": {
+    "a_stock": {
+      "trading_hours": [
+        {"start": "09:30", "end": "11:30"},
+        {"start": "13:00", "end": "15:00"}
+      ],
+      "limit_threshold": 0.1,  // ±10%
+      "stamp_duty_rate": 0.001  // 卖出时0.1%
+    },
+    "hk_stock": {
+      "stamp_duty_rate": 0.0013  // 卖出时0.13%
+    }
+  }
+}

@@ -1,13 +1,15 @@
-
 """
 Web UI 服务器
 提供交易仪表盘
 """
 
 import asyncio
-from aiohttp import web
 import json
+import logging
 from datetime import datetime
+from aiohttp import web
+
+logger = logging.getLogger(__name__)
 
 
 class TradingDashboard:
@@ -379,6 +381,7 @@ class TradingDashboard:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     dashboard = TradingDashboard()
-    print("🚀 交易仪表盘启动: http://localhost:8080")
+    logger.info("交易仪表盘启动: http://localhost:8080")
     dashboard.run()

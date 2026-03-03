@@ -4,6 +4,45 @@
 
 ---
 
+## [v1.0.2] - 2025-02-21
+
+### 🟢 代码质量提升
+
+#### 新增
+- **完整单元测试覆盖** ([`tests/`](tests/))
+  - `test_config_manager.py` - 配置管理器测试（默认配置、API校验、保存/加载、导出脱敏、列出配置）
+  - `test_risk_manager.py` - 风险管理器测试（仓位计算、止损/止盈检查、开仓/更新/平仓/列表）
+  - `test_strategies.py` - 策略测试（已存在）
+  - **24个测试全部通过** ✅
+
+#### 优化
+- **日志标准化** - 替换`print()`为`logging`
+  - `utils/`: config_manager.py, risk_manager.py, ai_enhancer.py
+  - `execution/`: exchange_client.py
+  - `ui/`: admin_backend.py, unified_server.py, dashboard.py
+  - 所有异常处理和测试块统一使用logger
+
+- **API文档完善** - 补充docstring和类型注解
+  - `create_client()` - exchange_client.py
+  - `create_strategy()` - strategies/factory.py
+  - `create_data_fetcher()` - data_fetcher.py
+  - `TradingBot` - trading_bot.py（类说明、所有方法的docstring和返回类型）
+
+#### 配置
+- **环境变量模板** - 更新README和.gitignore
+  - 添加`.env`使用说明
+  - 增强敏感配置排除规则
+  - 添加MIT License标注
+
+### 📊 测试运行
+
+```bash
+python3 -m unittest tests.test_config_manager tests.test_risk_manager tests.test_strategies -v
+# 24 tests passed ✅
+```
+
+---
+
 ## [v1.0.1] - 2025-02-21
 
 ### 🔴 残缺模块重建

@@ -1,3 +1,4 @@
+"""策略工厂：根据类型名和配置创建策略实例。"""
 
 from .base import BaseStrategy
 from .breakout import BreakoutStrategy
@@ -7,8 +8,16 @@ from .rsi import RSIStrategy
 from .volume import VolumeStrategy
 from .multi import MultiStrategy
 
+
 def create_strategy(strategy_type: str, config: dict) -> BaseStrategy:
-    """创建策略"""
+    """
+    根据策略类型和配置创建策略实例。
+
+    :param strategy_type: 策略类型，支持 "breakout"、"grid"、"ma_cross"、"rsi"、"volume"、"multi"
+    :param config: 策略参数字典，具体字段由各策略定义；multi 需 "strategies" 与可选 "weights"
+    :return: 策略实例，可用于 generate_signals(df) 等
+    :raises ValueError: 未知的 strategy_type 时抛出
+    """
     strategies = {
         "breakout": BreakoutStrategy,
         "grid": GridStrategy,

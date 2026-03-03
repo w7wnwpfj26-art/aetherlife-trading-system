@@ -1,18 +1,24 @@
 # AetherLife Trading System
 
-**版本**: v1.0.1 (2025-02-21) | [English](README_EN.md) | [文档](docs/)
+**版本**: v1.0.2 (2025-02-21) | [English](README_EN.md) | [文档](docs/) | **License**: [MIT](LICENSE)
 
 基于Python的AI驱动多市场量化交易系统，支持加密货币、A股、美股、期货、外汇等多市场交易。
 
-## 🎉 最新更新 (v1.0.1)
+## 🎉 最新更新 (v1.0.2)
 
-- ✅ **完整订单管理系统**（修复残缺模块）
-- ✅ **性能优化**：内存队列 O(n)→O(1)
-- ✅ **日志持久化** + 动态级别调整
-- ✅ **指数退避重试**策略
-- ✅ **真实网络连接测试**
+- ✅ **完整单元测试覆盖**（24个测试全部通过）
+- ✅ **日志标准化**（print → logging）
+- ✅ **API文档完善**（docstring + 类型注解）
+- ✅ **环境变量模板**（.env.example + 使用说明）
 
-详见: [优化汇总文档](docs/OPTIMIZATION_SUMMARY.md)
+**v1.0.1优化**:
+- ✅ 完整订单管理系统（修复残缺模块）
+- ✅ 性能优化：内存队列 O(n)→O(1)
+- ✅ 日志持久化 + 动态级别调整
+- ✅ 指数退避重试策略
+- ✅ 真实网络连接测试
+
+详见: [优化汇总文档](docs/OPTIMIZATION_SUMMARY.md) | [更新日志](CHANGELOG.md)
 
 > ⚠️ **风险提示**: 高杠杆交易风险极高，可能亏光全部本金。本项目仅供学习研究，不构成投资建议。
 
@@ -43,6 +49,8 @@
 ```bash
 cd 合约交易系统
 pip install -r requirements.txt
+# 复制环境变量模板并填入 API Key（勿提交 .env）
+cp .env.example .env
 python src/trading_bot.py
 ```
 

@@ -4,13 +4,16 @@
 """
 
 import asyncio
-from aiohttp import web
-from pathlib import Path
-import sys
+import logging
 import os
+import sys
+from pathlib import Path
+from aiohttp import web
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
+
+logger = logging.getLogger("unified_server")
 
 from ui.admin_backend import AdminBackend
 from ui.dashboard import TradingDashboard
@@ -112,11 +115,7 @@ async def main(host: str = "0.0.0.0", port: int = 8888, open_browser: bool = Tru
     site = web.TCPSite(runner, host, port)
     await site.start()
     url = f"http://{host if host != '0.0.0.0' else 'localhost'}:{port}/"
-    print(f"🚀 统一入口已启动: {url}")
-    print("   - 首页:     /")
-    print("   - 后台管理: /admin")
-    print("   - 前台总览: /pages/front.html 或 /front")
-    print("   - 交易仪表盘: /dashboard")
+    logger.info("统一入口已启动: %s (首页 / 后台管理 /admin 前台 /pages/front.html 仪表盘 /dashboard)", url)
     if open_browser:
         try:
             webbrowser.open(url)

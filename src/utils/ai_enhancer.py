@@ -5,11 +5,14 @@ AI 增强模块
 
 import asyncio
 import aiohttp
+import json
+import logging
 import pandas as pd
 import numpy as np
 from typing import Dict, List, Optional
 from datetime import datetime
-import json
+
+logger = logging.getLogger(__name__)
 
 
 class SentimentAnalyzer:
@@ -108,7 +111,7 @@ class MLPredictor:
         self.model = LogisticRegression(max_iter=1000)
         self.model.fit(features, labels)
         self.is_trained = True
-        print(f"模型训练完成，准确率: {self.model.score(features, labels):.2%}")
+        logger.info("模型训练完成，准确率: %s", f"{self.model.score(features, labels):.2%}")
     
     def predict(self, df: pd.DataFrame) -> float:
         """预测信号 (-1~1 置信度)"""
@@ -304,7 +307,7 @@ class AutoCompoundManager:
         amount = self.get_compound_amount()
         if amount > 0:
             self.initial_capital += amount
-            print(f"🔄 复利投入: {amount:.2f} USDT")
+            logger.info("复利投入: %.2f USDT", amount)
         return amount
     
     def get_stats(self) -> Dict:
@@ -338,22 +341,15 @@ if __name__ == "__main__":
         }
         
         result = await coordinator.analyze("BTCUSDT", {"df": df, "orderbook": orderbook})
-        
-        print("多Agent分析结果:")
-        print(f"综合信号: {result['combined']:.3f}")
-        print(f"决策: {result['decision']}")
-        
-        # 测试复利
+        logger.info("多Agent分析结果: 综合信号=%s, 决策=%s", result["combined"], result["decision"])
         compound_mgr = AutoCompoundManager({
             "auto_compound": True,
             "rebalance_threshold": 0.1,
             "compound_ratio": 0.5,
             "initial_capital": 10000
         })
-        
-        compound_mgr.record_profit(1500)  # 15% 利润
-        print(f"\n利润: {compound_mgr.total_profit}")
-        print(f"应复利: {compound_mgr.should_compound()}")
-        print(f"复利金额: {compound_mgr.get_compound_amount():.2f}")
+        compound_mgr.record_profit(1500)
+        logger.info("利润=%s, 应复利=%s, 复利金额=%.2f",
+                    compound_mgr.total_profit, compound_mgr.should_compound(), compound_mgr.get_compound_amount())
     
     asyncio.run(test())

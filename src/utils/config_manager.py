@@ -4,11 +4,14 @@
 """
 
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Dict, Optional, List
 import base64
 from cryptography.fernet import Fernet
+
+logger = logging.getLogger(__name__)
 
 
 class ConfigManager:
@@ -68,7 +71,7 @@ class ConfigManager:
             
             return True
         except Exception as e:
-            print(f"保存配置失败: {e}")
+            logger.exception("保存配置失败")
             return False
     
     def _save_secure_data(self, data: Dict):
@@ -96,7 +99,7 @@ class ConfigManager:
             
             return config if config else None
         except Exception as e:
-            print(f"加载配置失败: {e}")
+            logger.exception("加载配置失败")
             return None
     
     def _load_secure_data(self) -> Optional[Dict]:
@@ -111,7 +114,7 @@ class ConfigManager:
             decrypted_data = self.cipher.decrypt(encrypted_data)
             return json.loads(decrypted_data.decode())
         except Exception as e:
-            print(f"解密敏感数据失败: {e}")
+            logger.warning("解密敏感数据失败: %s", e)
             return None
     
     def get_default_config(self) -> Dict:
@@ -175,7 +178,7 @@ class ConfigManager:
                 os.remove(self.secure_config_file)
             return True
         except Exception as e:
-            print(f"删除配置失败: {e}")
+            logger.exception("删除配置失败")
             return False
     
     def export_config(self, include_sensitive: bool = False) -> Optional[Dict]:

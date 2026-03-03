@@ -20,9 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE_DIR)
 
 from utils.config_manager import ConfigManager
+from utils.logger import get_logger
 from execution.exchange_client import create_client
 from ui.api.aetherlife_api import AetherLifeAPI
 from ui.websocket.realtime_push import RealTimePush
+
+logger = get_logger("admin")
 
 
 class AdminBackend:
@@ -333,7 +336,7 @@ class AdminBackend:
         await runner.setup()
         site = web.TCPSite(runner, host, port)
         await site.start()
-        print(f"🚀 后台管理系统启动: http://{host}:{port}/admin")
+        logger.info("后台管理系统启动: http://%s:%s/admin", host, port)
         return runner
 
 

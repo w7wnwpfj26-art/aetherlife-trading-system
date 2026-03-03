@@ -25,8 +25,13 @@ logger = get_logger()
 
 
 class TradingBot:
-    """合约交易机器人"""
-    
+    """
+    合约交易机器人：整合数据获取、策略分析、执行与风控。
+
+    使用方式：先通过 initialize() 初始化交易所客户端与策略，
+    再调用 run() 进入主循环（拉取数据 → 分析信号 → 风控检查 → 执行）。
+    """
+
     def __init__(self, config: dict):
         self.config = copy.deepcopy(config)
         self.running = False
@@ -62,8 +67,8 @@ class TradingBot:
         # 追踪止损：记录每个标的持仓期间的最高/最低价
         self._peak_prices: dict = {}
         
-    async def initialize(self):
-        """初始化"""
+    async def initialize(self) -> None:
+        """初始化：校验配置、创建数据获取器、交易所客户端与策略。配置错误时抛出 ValueError。"""
         errs = validate_config(self.config)
         if errs:
             for e in errs:
@@ -92,7 +97,7 @@ class TradingBot:
         logger.info(f"✓ 时间周期: {self.timeframe}")
 
     async def fetch_market_data(self) -> Dict:
-        """获取市场数据（OHLCV 与 Ticker 并行请求）"""
+        """获取当前交易对的 K 线与 Ticker，返回 {\"df\": DataFrame, \"ticker\": dict}。"""
         symbol, tf = self.current_symbol, self.timeframe
         df, ticker = await asyncio.gather(
             self.data_fetcher.get_ohlcv(symbol, tf, 100),
@@ -101,7 +106,7 @@ class TradingBot:
         return {"df": df, "ticker": ticker}
 
     async def analyze(self, data: Dict) -> int:
-        """分析市场，生成信号"""
+        """根据市场数据生成交易信号，返回 -1/0/1（卖/观望/买）。"""
         df = data.get("df")
         if df is None or not hasattr(df, "iloc") or len(df) < 2:
             return 0
@@ -114,8 +119,8 @@ class TradingBot:
             self.last_signal = signal
         return signal
     
-    async def execute_signal(self, signal: int):
-        """执行信号"""
+    async def execute_signal(self, signal: int) -> None:
+        """根据信号执行开平仓（含风控与仓位计算），signal 为 0 时不操作。"""
         if signal == 0:
             return
         
@@ -273,8 +278,8 @@ class TradingBot:
                 "side": pos["side"],
             })
     
-    async def run(self):
-        """运行交易机器人"""
+    async def run(self) -> None:
+        """运行交易机器人：先初始化，再进入循环（拉数据 → 分析 → 执行），直到停止。"""
         await self.initialize()
         
         self.running = True

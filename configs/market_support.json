@@ -1,0 +1,216 @@
+{
+  "markets": {
+    "crypto": {
+      "name": "加密货币",
+      "status": "ready",
+      "exchanges": [
+        {
+          "id": "binance",
+          "name": "Binance",
+          "products": ["spot", "futures", "perpetual"],
+          "leverage": "1-125x",
+          "supported": true
+        },
+        {
+          "id": "bybit",
+          "name": "Bybit",
+          "products": ["spot", "futures", "perpetual"],
+          "leverage": "1-100x",
+          "supported": true
+        },
+        {
+          "id": "okx",
+          "name": "OKX",
+          "products": ["spot", "futures", "perpetual"],
+          "leverage": "1-125x",
+          "supported": true
+        }
+      ]
+    },
+    "a_stock": {
+      "name": "A股市场",
+      "status": "ready",
+      "description": "通过IBKR Stock Connect接入",
+      "features": [
+        "涨跌停限制（±10%）",
+        "北向额度监控",
+        "交易时段限制（09:30-11:30, 13:00-15:00）",
+        "T+1交易规则",
+        "印花税成本（卖出0.1%）"
+      ],
+      "supported_exchanges": [
+        {
+          "name": "上海证券交易所",
+          "symbols": "6XXXXX开头",
+          "connector": "IBKR via SEHK"
+        },
+        {
+          "name": "深圳证券交易所",
+          "symbols": "0XXXXX/3XXXXX开头",
+          "connector": "IBKR via SEHK"
+        }
+      ]
+    },
+    "hk_stock": {
+      "name": "港股市场",
+      "status": "ready",
+      "description": "通过IBKR直接接入",
+      "features": [
+        "无涨跌停限制",
+        "T+0交易",
+        "印花税成本（卖出0.13%）"
+      ],
+      "supported_exchanges": [
+        {
+          "name": "香港联合交易所",
+          "symbols": "四位数字代码",
+          "connector": "IBKR SMART/SEHK"
+        }
+      ]
+    },
+    "us_stock": {
+      "name": "美股市场",
+      "status": "ready",
+      "description": "通过IBKR直接接入",
+      "features": [
+        "无涨跌停限制",
+        "T+0交易",
+        "支持期权"
+      ],
+      "supported_exchanges": [
+        {
+          "name": "纽约证券交易所",
+          "symbols": "字母代码",
+          "connector": "IBKR SMART/NYSE"
+        },
+        {
+          "name": "纳斯达克",
+          "symbols": "字母代码",
+          "connector": "IBKR SMART/NASDAQ"
+        }
+      ]
+    },
+    "forex": {
+      "name": "外汇市场",
+      "status": "ready",
+      "description": "通过IBKR接入主要货币对",
+      "features": [
+        "24小时交易",
+        "保证金交易",
+        "点差成本"
+      ],
+      "supported_pairs": [
+        "EUR/USD", "GBP/USD", "USD/JPY", "USD/CHF",
+        "AUD/USD", "NZD/USD", "USD/CAD"
+      ]
+    },
+    "futures": {
+      "name": "期货市场",
+      "status": "ready",
+      "description": "通过IBKR接入全球主要期货",
+      "features": [
+        "杠杆交易",
+        "保证金要求",
+        "到期日管理"
+      ],
+      "supported_products": [
+        {
+          "name": "股指期货",
+          "symbols": ["ES", "NQ", "YM", "RTY"],
+          "exchange": "CME"
+        },
+        {
+          "name": "商品期货",
+          "symbols": ["CL", "NG", "GC", "SI"],
+          "exchange": "NYMEX/COMEX"
+        },
+        {
+          "name": "国债期货",
+          "symbols": ["ZN", "ZF", "ZT"],
+          "exchange": "CBOT"
+        }
+      ]
+    }
+  },
+  "connectors": {
+    "ibkr": {
+      "name": "Interactive Brokers",
+      "status": "enhanced",
+      "version": "1.0.2",
+      "features": [
+        "统一API接入多市场",
+        "自动断线重连",
+        "实时行情订阅",
+        "订单执行",
+        "账户管理",
+        "持仓查询"
+      ],
+      "requirements": [
+        "IBKR账户",
+        "TWS或Gateway客户端",
+        "API访问权限"
+      ]
+    },
+    "ccxt": {
+      "name": "CCXT Pro",
+      "status": "production",
+      "version": "4.2.0",
+      "features": [
+        "统一加密货币接口",
+        "WebSocket实时推送",
+        "REST API支持",
+        "100+交易所"
+      ],
+      "supported_exchanges": ["binance", "bybit", "okx"]
+    }
+  },
+  "configuration": {
+    "ibkr_settings": {
+      "host": "127.0.0.1",
+      "paper_trading_port": 7497,
+      "live_trading_port": 7496,
+      "gateway_paper_port": 4002,
+      "gateway_live_port": 4001,
+      "client_id": 1,
+      "timeout": 20
+    },
+    "risk_management": {
+      "a_stock": {
+        "max_position_size": 0.1,
+        "stop_loss_pct": 0.05,
+        "take_profit_pct": 0.1,
+        "northbound_quota_threshold": 0.1
+      },
+      "crypto": {
+        "max_leverage": 20,
+        "stop_loss_pct": 0.1,
+        "take_profit_pct": 0.2
+      }
+    }
+  },
+  "usage_examples": {
+    "a_stock_example": {
+      "symbol": "600000",
+      "exchange": "SEHK",
+      "currency": "HKD",
+      "description": "通过港交所接入浦发银行A股"
+    },
+    "us_stock_example": {
+      "symbol": "AAPL",
+      "exchange": "SMART",
+      "currency": "USD",
+      "description": "苹果公司美股"
+    },
+    "forex_example": {
+      "symbol": "EUR.USD",
+      "sec_type": "CASH",
+      "description": "欧元兑美元外汇"
+    },
+    "futures_example": {
+      "symbol": "ES",
+      "sec_type": "FUT",
+      "exchange": "CME",
+      "description": "标普500指数期货"
+    }
+  }
+}

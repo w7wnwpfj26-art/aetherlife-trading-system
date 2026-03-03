@@ -3,10 +3,13 @@
 仓位管理、止损止盈、熔断机制
 """
 
+import logging
 import time
 from typing import Dict, List, Optional
 from datetime import datetime, timedelta
 from collections import deque
+
+logger = logging.getLogger(__name__)
 
 
 class RiskManager:
@@ -358,30 +361,26 @@ if __name__ == "__main__":
     price = 50000
     
     position_size = risk_mgr.calculate_position_size(signal, balance, price)
-    print(f"仓位大小: {position_size:.6f} BTC")
+    logger.info("仓位大小: %s BTC", f"{position_size:.6f}")
     
     # 测试止损
     entry = 50000
     current = 49000
-    
     result = risk_mgr.check_stop_loss(entry, current, "LONG")
-    print(f"止损检查: {result}")
+    logger.info("止损检查: %s", result)
     
     # 测试止盈
     current = 52500
     result = risk_mgr.check_take_profit(entry, current, "LONG")
-    print(f"止盈检查: {result}")
+    logger.info("止盈检查: %s", result)
     
     # 测试仓位管理
     pos_mgr = PositionManager()
     pos_mgr.open_position("BTCUSDT", "LONG", 0.01, 50000, 10)
-    
     pos = pos_mgr.get_position("BTCUSDT")
-    print(f"当前仓位: {pos}")
-    
+    logger.info("当前仓位: %s", pos)
     pos_mgr.update_position("BTCUSDT", 51000)
     pos = pos_mgr.get_position("BTCUSDT")
-    print(f"更新后仓位: {pos}")
-    
+    logger.info("更新后仓位: %s", pos)
     result = pos_mgr.close_position("BTCUSDT", 51000)
-    print(f"平仓结果: {result}")
+    logger.info("平仓结果: %s", result)

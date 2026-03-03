@@ -7,10 +7,13 @@ import asyncio
 import aiohttp
 import hmac
 import hashlib
+import json
+import logging
 import time
 from typing import Dict, List, Optional
 from datetime import datetime
-import json
+
+logger = logging.getLogger(__name__)
 
 
 # 请求超时（秒），避免长时间挂起
@@ -117,7 +120,7 @@ class BinanceClient(ExchangeClient):
                             self.exchange_info[s["symbol"]]["step_size"] = float(f["stepSize"])
                             
         except Exception as e:
-            print(f"Failed to load exchange info: {e}")
+            logger.warning("Failed to load exchange info: %s", e)
 
     async def get_exchange_info(self, symbol: str) -> Dict:
         """获取交易对规则信息"""
@@ -400,8 +403,22 @@ class OKXClient(ExchangeClient):
 
 
 # 便捷函数
-def create_client(exchange: str = "binance", api_key: str = "", secret_key: str = "", testnet: bool = True) -> ExchangeClient:
-    """创建交易所客户端"""
+def create_client(
+    exchange: str = "binance",
+    api_key: str = "",
+    secret_key: str = "",
+    testnet: bool = True,
+) -> ExchangeClient:
+    """
+    根据交易所类型创建合约交易客户端。
+
+    :param exchange: 交易所标识，支持 "binance"、"okx"
+    :param api_key: API Key（可为空，仅公开接口则不需要）
+    :param secret_key: Secret Key（可为空）
+    :param testnet: 是否使用测试网
+    :return: 对应交易所的客户端实例
+    :raises ValueError: 不支持的 exchange 时抛出
+    """
     if exchange.lower() == "binance":
         return BinanceClient(api_key, secret_key, testnet)
     elif exchange.lower() == "okx":
@@ -413,19 +430,14 @@ def create_client(exchange: str = "binance", api_key: str = "", secret_key: str 
 # 测试
 if __name__ == "__main__":
     async def test():
-        # 测试 Binance 测试网
         client = BinanceClient(testnet=True)
-        
-        # 获取行情
         ticker = await client.get_ticker("BTCUSDT")
-        print("24小时行情:", ticker.get("lastPrice"))
-        
-        # 获取订单簿
+        logger.info("24小时行情: %s", ticker.get("lastPrice"))
         orderbook = await client.get_orderbook("BTCUSDT")
-        print("卖单:", orderbook.get("asks", [])[:3])
-        print("买单:", orderbook.get("bids", [])[:3])
-        
+        logger.info("卖单: %s", orderbook.get("asks", [])[:3])
+        logger.info("买单: %s", orderbook.get("bids", [])[:3])
         await client.close()
-        print("\n测试完成!")
-    
+        logger.info("测试完成")
+
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(test())
