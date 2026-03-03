@@ -5,8 +5,8 @@
 ## 开发环境
 
 ```bash
-git clone <repo>
-cd 合约交易系统
+git clone https://github.com/w7wnwpfj26-art/aetherlife-trading-system.git
+cd aetherlife-trading-system
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt

@@ -1,11 +1,12 @@
 # AetherLife Trading System
 
-**版本**: v1.0.2 (2025-02-21) | [English](README_EN.md) | [文档](docs/) | **License**: [MIT](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-开源-blue?logo=github)](https://github.com/w7wnwpfj26-art/aetherlife-trading-system) **版本**: v1.0.2 (2025-02-21) | [English](README_EN.md) | [文档](docs/) | **License**: [MIT](LICENSE)
 
-基于Python的AI驱动多市场量化交易系统，支持加密货币、A股、美股、期货、外汇等多市场交易。
+基于 Python 的 AI 驱动多市场量化交易系统，支持加密货币、A股、美股、期货、外汇等多市场交易。
 
 ## 🎉 最新更新 (v1.0.2)
 
+- ✅ **项目已开源**：[GitHub 仓库](https://github.com/w7wnwpfj26-art/aetherlife-trading-system)
 - ✅ **完整单元测试覆盖**（24个测试全部通过）
 - ✅ **日志标准化**（print → logging）
 - ✅ **API文档完善**（docstring + 类型注解）
@@ -27,27 +28,35 @@
 ```
 合约交易系统/
 ├── README.md
-├── config.json
 ├── requirements.txt
+├── .env.example                # 环境变量模板（复制为 .env 并填写）
+├── configs/                    # 配置目录（勿提交含密钥的 config.json）
 ├── src/
-│   ├── trading_bot.py           # 主程序
-│   ├── data/
-│   │   └── data_fetcher.py     # 数据获取
-│   ├── strategies/
-│   │   └── strategy.py         # 策略模块
-│   ├── execution/
-│   │   └── exchange_client.py  # 交易所API
-│   └── utils/
-│       ├── risk_manager.py     # 风控模块
-│       └── ai_enhancer.py      # AI 增强模块 ⭐
+│   ├── trading_bot.py          # 主程序入口
+│   ├── aetherlife/             # AetherLife 核心包
+│   │   ├── core/               # 生命周期与调度
+│   │   ├── perception/         # 感知层（IBKR、Kafka、Crypto）
+│   │   ├── cognition/          # 认知层（多代理、辩论、协调器）
+│   │   ├── decision/           # 决策层（RL、PPO）
+│   │   ├── guard/              # 守护层（风控）
+│   │   ├── execution/          # 执行层（订单、IBKR、重试）
+│   │   ├── evolution/          # 进化层（回测、遗传优化）
+│   │   └── memory/             # 记忆存储
+│   ├── strategies/             # 策略（RSI、网格、突破、MACD 等）
+│   ├── execution/              # 交易所客户端、订单管理
+│   ├── utils/                  # 配置、风控、日志、AI 增强
+│   └── ui/                     # Web 仪表盘、管理后台
 ├── tests/
-└── docs/
+├── docs/
+├── scripts/                    # 演示与自改进脚本
+└── k8s/                        # Kubernetes 部署
 ```
 
 ## 🚀 快速开始
 
 ```bash
-cd 合约交易系统
+git clone https://github.com/w7wnwpfj26-art/aetherlife-trading-system.git
+cd aetherlife-trading-system
 pip install -r requirements.txt
 # 复制环境变量模板并填入 API Key（勿提交 .env）
 cp .env.example .env

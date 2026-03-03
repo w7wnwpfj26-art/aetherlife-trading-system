@@ -67,6 +67,7 @@ services:
     environment:
       - CLICKHOUSE_DB=trading
       - CLICKHOUSE_USER=aether
+      # 以下为本地开发默认密码，生产环境请通过 env 覆盖
       - CLICKHOUSE_PASSWORD=aether_password
     volumes:
       - clickhouse_data:/var/lib/clickhouse
@@ -138,6 +139,7 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
+      # 本地开发默认密码，生产请通过 env 覆盖
       - GF_SECURITY_ADMIN_PASSWORD=aether_admin
       - GF_INSTALL_PLUGINS=redis-datasource
     volumes:
